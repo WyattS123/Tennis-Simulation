@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>VR Tennis Ball</title>
+    <meta name="description" content="A-Frame VR Tennis Ball">
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  </head>
+  <body>
+    <a-scene>
+      <!-- Set up the camera -->
+      <a-entity camera position="0 1.6 0"></a-entity>
+
+      <!-- Set up the lighting -->
+      <a-light type="ambient" color="#888"></a-light>
+      <a-light type="directional" position="-1 1 0" intensity="0.5"></a-light>
+
+      <!-- Set up the ground -->
+      <a-plane position="0 0 -4" rotation="-90 0 0" width="10" height="10" color="#7BC8A4"></a-plane>
+
+      <!-- Set up the tennis ball -->
+      <a-sphere id="tennisBall" position="2 2.5 -10" radius="0.2" color="#FFD700"></a-sphere>
+    </a-scene>
+
+    <script>
+      // JavaScript to animate the tennis ball along a natural path
+      AFRAME.registerComponent('animate-ball', {
+        init: function () {
+          var ball = this.el;
+          ball.setAttribute('animation__position', {
+            property: 'position',
+            to: '1 1 -1',
+            dur: 1500,
+            easing: 'easeOutQuad',
+            loop: false
+          });
+
+          ball.addEventListener('animationcomplete__position', function () {
+            // Wait for 3 seconds after the animation completes
+            setTimeout(function () {
+              // Reset the ball's position
+              ball.setAttribute('position', '2 2.5 -10');
+              // Restart the animation
+              ball.setAttribute('animation__position', {
+                property: 'position',
+                to: '1 1 -1',
+                dur: 1500,
+                easing: 'easeOutQuad',
+                loop: false
+              });
+            }, 3000); // 3000 milliseconds = 3 seconds
+          });
+        }
+      });
+
+      document.querySelector('#tennisBall').setAttribute('animate-ball', '');
+    </script>
+  </body>
+</html>
